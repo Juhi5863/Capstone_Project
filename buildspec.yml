@@ -1,20 +1,32 @@
 version: 0.2
 
+env:
+  variables:
+    ACCOUNT_ID: "713881797197"
+    REGION: "us-east-1"
+    REPO_NAME: "ecommerce-ecr"
+    IMAGE_TAG: "latest"
+    SONAR_PROJECT_KEY: "capstone-project"
+    SONAR_HOST_URL: "http://34.205.76.160"
+    SONAR_TOKEN: "sqp_8aed92df03ce943bee02e05a373650103be72daa"
+
 phases:
   install:
     runtime-versions:
-      nodejs: 18  # or 16 or 20 depending on your project needs
+      nodejs: 18
     commands:
       - echo Installing Node.js dependencies...
       - npm install
 
   pre_build:
     commands:
+      - echo Running SonarQube analysis...
+      - sonar-scanner \
+          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=${SONAR_HOST_URL} \
+          -Dsonar.login=${SONAR_TOKEN}
       - echo Logging in to Amazon ECR...
-      - ACCOUNT_ID=713881797197
-      - REGION=us-east-1
-      - REPO_NAME=ecommerce-ecr
-      - IMAGE_TAG=latest
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
 
   build:
