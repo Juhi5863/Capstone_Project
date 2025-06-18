@@ -15,6 +15,7 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
+      - set -e
       - echo Installing Node.js dependencies...
       - npm install
       - echo Installing SonarScanner CLI...
@@ -22,7 +23,6 @@ phases:
       - unzip sonar-scanner.zip
       - mv sonar-scanner-* sonar-scanner
       - export PATH=$PATH:$(pwd)/sonar-scanner/bin
-      - echo "PATH set to: $PATH"
       - sonar-scanner --version
 
   pre_build:
@@ -51,14 +51,10 @@ phases:
       - docker push ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}
       - echo Creating final deployment files...
       - mkdir -p k8s-out
-      - echo "--- Checking k8s directory structure ---"
-      - ls -l k8s
       - sed "s|IMAGE_PLACEHOLDER|${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}|g" k8s/deployment.yaml > k8s-out/deployment.yaml
       - cp k8s/service.yaml k8s-out/service.yaml
       - cp k8s/mongodb-deployment.yaml k8s-out/mongodb-deployment.yaml
       - cp k8s/mongodb-service.yaml k8s-out/mongodb-service.yaml
-      - echo "--- Contents of k8s-out ---"
-      - ls -R k8s-out
 
 artifacts:
   base-directory: k8s-out
