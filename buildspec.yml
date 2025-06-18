@@ -6,9 +6,9 @@ env:
     REGION: "us-east-1"
     REPO_NAME: "ecommerce-ecr"
     IMAGE_TAG: "latest"
-    SONAR_PROJECT_KEY: "capstone-project"
+    SONAR_PROJECT_KEY: "capstone"
     SONAR_HOST_URL: "http://34.238.235.43"
-    SONAR_TOKEN: "sqp_8aed92df03ce943bee02e05a373650103be72daa"
+    SONAR_TOKEN: "sqp_2478db8b560b8f00ba7e8cc04d4325a9c06e819f"
 
 phases:
   install:
